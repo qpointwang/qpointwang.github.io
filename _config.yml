@@ -4,6 +4,8 @@ tagline:      qpointwang's home
 baseurl:      ""
 locale:       "en"
 
+permalink: :year/:month/:day/:title/
+
 # Gems
 gems:
   - jekyll-paginate
