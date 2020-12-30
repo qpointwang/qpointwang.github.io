@@ -1,0 +1,100 @@
+---
+layout: post
+title:  "MySQL 慢查询"
+date:   2020-03-28 10:03:36
+categories: MySQL
+---
+
+mysql慢查询日志是mysql提供的一种日志记录，它是用来记录在mysql中相应时间超过阈值的语句，就是指运行时间超过long_query_time值的sql，会被记录在慢查询日志中。long_query_time的默认值是10，意思是运行10S之上的语句。
+
+##### 1.查看是否开启慢查询日志，默认关闭
+
+```mysql
+mysql> show variables like '%slow_query_log%';
++---------------------+------------------------------------------------------+
+| Variable_name       | Value                                                |
++---------------------+------------------------------------------------------+
+| slow_query_log      | ON                                                   |
+| slow_query_log_file | D:\mysql-8.0.19-winx64\data\DESKTOP-T5MOKJM-slow.log |
++---------------------+------------------------------------------------------+
+2 rows in set, 1 warning (0.00 sec)
+```
+
+##### 2.开启慢查询命令
+
+```mysql
+set global slow_query_log=1
+```
+
+##### 3.查询并修改慢查询定义的时间
+
+```mysql
+mysql> show variables like 'long_query_time%';
++-----------------+----------+
+| Variable_name   | Value    |
++-----------------+----------+
+| long_query_time | 0.100000 |
++-----------------+----------+
+
+set global long_query_time=4
+```
+
+##### 4.未使用索引的查询被记录到慢查询日志中。如果调优的话，建议开启这个选项。如果开启了这个参数，full index scan的sql也会被记录到慢查询日志中。
+
+```mysql
+mysql> show variables like 'log_queries_not_using_indexes';
++-------------------------------+-------+
+| Variable_name                 | Value |
++-------------------------------+-------+
+| log_queries_not_using_indexes | OFF   |
++-------------------------------+-------+
+
+set global log_queries_not_using_indexes=1
+```
+
+##### 5.查询有多少条慢查询记录
+
+```mysql
+show global status like '%Slow_queries%';
+```
+
+##### 6.mysqldumpslow 慢日志分析工具
+
+```
+-s 按照那种方式排序
+    c：访问计数
+    l：锁定时间
+    r:返回记录
+    al：平均锁定时间
+    ar：平均访问记录数
+    at：平均查询时间
+-t 是top n的意思，返回多少条数据。
+-g 可以跟上正则匹配模式，大小写不敏感。
+```
+
+```mysql
+mysqldumpslow -s r -t 2 DESKTOP-T5MOKJM-slow.log ## 得到返回记录最多的20个sql
+
+
+
+D:\mysql-8.0.19-winx64\bin>perl mysqldumpslow.pl -s c -a -t 2 D:\mysql-8.0.19-winx64\data\DESKTOP-T5MOKJM-slow.log
+
+Reading mysql slow query log from D:\mysql-8.0.19-winx64\data\DESKTOP-T5MOKJM-slow.log
+Count: 1  Time=0.50s (0s)  Lock=0.00s (0s)  Rows=1.0 (1), root[root]@localhost
+  select * from websites where name = 'alibaba999999'
+
+Count: 1  Time=1.61s (1s)  Lock=0.00s (0s)  Rows=2.0 (2), root[root]@localhost
+  show global status like '%slow%'
+
+
+```
+
+##### 注意
+
+要想运行mysqldumpslow.pl（这是perl程序），下载perl编译器。下载地址：http://pan.baidu.com/s/1i3GLKAp。就是ActivePerl_5.16.2.3010812913.msi，一步一步安装后，将bin加入环境变量path。
+
+#### 参考
+
+[mysql 开启慢查询及其用mysqldumpslow做日志分析](https://blog.csdn.net/sunyuhua_keyboard/article/details/81204020)
+
+[windows下mysql5.6.20使用mysqldumpslow.pl分析慢日志](<https://blog.csdn.net/stevendbaguo/article/details/47128531>)
