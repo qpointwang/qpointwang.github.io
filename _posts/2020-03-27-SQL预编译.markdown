@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "SQL预编译"
 date:   2020-03-27 21:47:36 +0530
 ---

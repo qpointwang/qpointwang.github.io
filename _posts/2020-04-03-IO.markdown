@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "I/O 模型"
 description: 五种I/O模型
 date:   2020-04-03 21:03:36 +0530

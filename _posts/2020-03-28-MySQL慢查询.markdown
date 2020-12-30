@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "MySQL 慢查询"
 description: mysql慢查询日志是mysql提供的一种日志记录，它是用来记录在mysql中相应时间超过阈值的语句，就是指运行时间超过long_query_time值的sql，会被记录在慢查询日志中。long_query_time的默认值是10，意思是运行10S之上的语句。
 date:   2020-03-28 10:03:36 +0530
