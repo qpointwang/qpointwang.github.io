@@ -1,8 +1,5 @@
 ---
 layout: default
----
----
-layout: default
 title:  "IPC"
 description: 进程间通信
 date:   2020-02-23 10:03:36 +0530
