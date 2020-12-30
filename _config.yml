@@ -4,7 +4,7 @@ tagline:      qpointwang's home
 baseurl:      ""
 locale:       "en"
 
-permalink: :title/
+permalink: :year/:month/:day/:title/
 
 # Gems
 gems:
