@@ -21,7 +21,7 @@ categories: Java
 ### 2. 非阻塞 I/O 模型
 
 当你调用read时，如果有数据收到，就返回数据，如果没有数据收到，就立刻返回一个错误。这样是不会阻塞线程了，但是你还是要不断的轮询来读取或写入。一旦内核中的数据准备好了，并且又再次收到了用户线程的请求，那么它马上就将数据拷贝到了用户线程，然后返回。
-用户线程需要不断地询问内核数据是否就绪，也就说非阻塞 IO不会交出 CPU，而会一直占用 CPU。![IO2](https://github.com/qpointwang/qpointwang.github.io/blob/master/_pic/IO2.png)
+用户线程需要不断地询问内核数据是否就绪，也就说非阻塞 IO不会交出 CPU，而会一直占用 CPU。![IO2](https://github.com/qpointwang/qpointwang.github.io/blob/main/_pic/IO2.png)
 
 ### 3. I/O多路复用(I/O multiplexing)
 
@@ -37,13 +37,13 @@ categories: Java
 
 在Java NIO中，是通过selector.select()去查询每个通道是否有到达事件，如果没有事件，则一直阻塞在那里，因此这种方式会导致用户线程的阻塞。也就是说，负责轮询的这个线程会阻塞，而每个socket并不会阻塞。
 
-![IO3](https://github.com/qpointwang/qpointwang.github.io/blob/master/_pic/IO3.png)
+![IO3](https://github.com/qpointwang/qpointwang.github.io/blob/main/_pic/IO3.png)
 
 ### 4. 信号驱动I/O模型
 
 当需要等待数据的时候，首先用户态会向内核发送一个信号，告诉内核我要什么数据，然后用户态就不管了，做别的事情去了，而当内核态中的数据准备好之后，内核立马发给用户态一个信号，说”数据准备好了，快来查收“，用户态进程收到之后，立马调用recvfrom，等待数据从内核空间复制到用户空间，待完成之后recvfrom返回成功指示，用户态进程才处理别的事情。
 
-![SIO](https://github.com/qpointwang/qpointwang.github.io/blob/master/_pic/IO4.png)
+![SIO](https://github.com/qpointwang/qpointwang.github.io/blob/main/_pic/IO4.png)
 
 可以看出信号驱动式I/O模型有种异步操作的赶脚，但是在将数据从内核复制到用户空间这段时间内用户态进程是阻塞的。
 
@@ -55,7 +55,7 @@ categories: Java
 
 也就说在异步IO模型中，IO操作的两个阶段都不会阻塞用户线程，这两个阶段都是由内核自动完成，然后发送一个信号告知用户线程操作已完成。用户线程中不需要再次调用IO函数进行具体的读写。这点是和信号驱动模型有所不同的。在信号驱动模型中，当用户线程接收到信号表示数据已经就绪，然后需要用户线程调用IO函数进行实际的读写操作；而在异步IO模型中，收到信号表示IO操作已经完成，不需要再在用户线程中调用IO函数进行实际的读写操作。
 
-![IO5](https://github.com/qpointwang/qpointwang.github.io/blob/master/_pic/IO5.png)
+![IO5](https://github.com/qpointwang/qpointwang.github.io/blob/main/_pic/IO5.png)
 
 
 
