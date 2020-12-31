@@ -11,7 +11,7 @@ categories: Java
 
 处于阻塞状态，用户线程会交出 CPU。
 
-![IO1](https://github.com/qpointwang/qpointwang.github.io/blob/main/_pic/IO1.png)
+![IO1](https://gitee.com/qpointwang/image/blob/master/IO1.png)
 
 这样，当服务器需要处理1000个连接的的时候，而且只有很少连接忙碌的，那么会需要1000个线程或进程来处理1000个连接，而1000个线程大部分是被阻塞起来的。由于CPU的核数或超线程数一般都不大，比如4,8,16,32,64,128，比如4个核要跑1000个线程，那么每个线程的时间槽非常短，而线程切换非常频繁。这样是有问题的：
 
